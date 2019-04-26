@@ -18,6 +18,7 @@ namespace Assignment
         {
             Driver = new ChromeDriver(@"F:\Automation Suit\OrangeHRM\chromedriver_win32");
             Driver.Navigate().GoToUrl("https://opensource-demo.orangehrmlive.com/");
+            Driver.Manage().Window.Maximize();
         }
 
         [TestCleanup]
@@ -78,6 +79,7 @@ namespace Assignment
                     ClickOnTopSubMenu("Organization");
                     HoverOverElement("General Information");
                     ClickEditOrSave("Edit");
+
                     //check fields are editable 
                     List<string> Fields = new List<string> { "Organization Name", "Tax ID", "Registration Number", "Fax", "Country", "Note" };
                     foreach (string field in Fields)
@@ -117,7 +119,6 @@ namespace Assignment
 
                     //Validate employee is created with same employee id
                     Assert.AreEqual(AEid,PDEid);
-
                 }
 
             }
@@ -136,18 +137,17 @@ namespace Assignment
                 Login("Admin", "admin123");
                 if (ValidateLogin())
                 {
-                    ClickOnTopMenu("PIM");
-                    ClickOnTopSubMenu("Add Employee");
-                    AddEmployeeDetails("Test", "User" + DateTime.Now.ToString("fff"));
-                    
-                    //Get employee id from Add Employee page
-                    string AEid = GetEmployeeIDFromAddEmpPage();
-
                     //Upload Profile Picture
-                    List<string> ImagePaths =  new List<string> { "C:\\Users\\AMOL\\Desktop\\panda.jpg", "C:\\Users\\AMOL\\Desktop\\Panda.png", "C:\\Users\\AMOL\\Desktop\\earth.gif" };
+                    List<string> ImagePaths =  new List<string> { "C:\\Users\\AMOL\\Desktop\\panda.jpg", "C:\\Users\\AMOL\\Desktop\\Panda.png", "C:\\Users\\AMOL\\Desktop\\Zipper.gif" };
 
                     foreach (string IPath in ImagePaths)
                     {
+                        ClickOnTopMenu("PIM");
+                        ClickOnTopSubMenu("Add Employee");
+                        AddEmployeeDetails("Test", "User" + DateTime.Now.ToString("fff"));
+
+                        //Get employee id from Add Employee page
+                        string AEid = GetEmployeeIDFromAddEmpPage();
                         UploadImage(IPath);
                         ClickSave();
 
@@ -156,8 +156,8 @@ namespace Assignment
 
                         //Validate employee is created with same employee id
                         Assert.AreEqual(AEid, PDEid);
+                        
                     }
-
                 }
 
             }
@@ -167,6 +167,28 @@ namespace Assignment
                 throw;
             }
         }
+
+        [TestMethod]
+        public void TS_PIM_06()
+        {
+            try
+            {
+                Login("Admin", "admin123");
+                if (ValidateLogin())
+                {
+                    ClickOnTopMenu("Dashboard");
+                    Thread.Sleep(5000);
+                    HoverOverGraph();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
+        }
+
         #endregion
 
 
@@ -388,6 +410,20 @@ namespace Assignment
         {
             IWebElement upload = Driver.FindElement(By.XPath("//input[@id='photofile']"));
             upload.SendKeys(Path);
+        }
+
+
+        public static void HoverOverGraph()
+        {
+            IList<IWebElement> PieElements = Driver.FindElements(By.XPath("//div[@id='div_graph_display_emp_distribution']/descendant::span"));
+            foreach (IWebElement pie in PieElements)
+            {
+                string id = pie.GetAttribute("id");
+
+                Actions element = new Actions(Driver);
+                element.MoveToElement(Driver.FindElement(By.XPath("//span[@id='" + id + "']"))).Click().Build().Perform();
+                Thread.Sleep(2000);
+            }
         }
         #endregion
     }
