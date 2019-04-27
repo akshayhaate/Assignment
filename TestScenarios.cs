@@ -12,11 +12,12 @@ namespace Assignment
     public class TestScenarios
     {
         static IWebDriver Driver;
+        string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
 
         [TestInitialize]
         public void Setup()
         {
-            Driver = new ChromeDriver(@"F:\Automation Suit\OrangeHRM\chromedriver_win32");
+            Driver = new ChromeDriver(RunningPath+"\\chromedriver_win32");
             Driver.Navigate().GoToUrl("https://opensource-demo.orangehrmlive.com/");
             Driver.Manage().Window.Maximize();
         }
@@ -137,7 +138,6 @@ namespace Assignment
                 Login("Admin", "admin123");
                 if (ValidateLogin())
                 {
-                    string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
                     //Upload Profile Picture
                     List<string> ImagePaths =  new List<string> { RunningPath+"\\Images\\panda.jpg", RunningPath + "\\Images\\Panda.png", RunningPath + "\\Images\\Zipper.gif" };
 
