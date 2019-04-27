@@ -137,8 +137,9 @@ namespace Assignment
                 Login("Admin", "admin123");
                 if (ValidateLogin())
                 {
+                    string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
                     //Upload Profile Picture
-                    List<string> ImagePaths =  new List<string> { "C:\\Users\\AMOL\\Desktop\\panda.jpg", "C:\\Users\\AMOL\\Desktop\\Panda.png", "C:\\Users\\AMOL\\Desktop\\Zipper.gif" };
+                    List<string> ImagePaths =  new List<string> { RunningPath+"\\Images\\panda.jpg", RunningPath + "\\Images\\Panda.png", RunningPath + "\\Images\\Zipper.gif" };
 
                     foreach (string IPath in ImagePaths)
                     {
